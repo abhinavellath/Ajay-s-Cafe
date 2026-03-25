@@ -34,3 +34,17 @@ module "rds" {
   storage         = 50
   private_subnets = module.vpc.private_subnets
 }
+
+module "bastion" {
+  source = "../../modules/ec2"
+
+  env            = "dev"
+  vpc_id         = module.vpc.vpc_id
+  public_subnet  = module.vpc.public_subnets[0]
+
+  instance_type  = "t2.micro"
+  ami            = "ami-0f58b397bc5c1f2e8"  # Amazon Linux (Mumbai)
+  key_name       = "your-keypair"
+
+  allowed_ips = ["YOUR_IP/32"]
+}
