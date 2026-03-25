@@ -4,3 +4,8 @@ variable "memory" {}
 variable "image" {}
 variable "private_subnets" {}
 variable "tg_arn" {}
+variable "cpu" {}
+variable "compatibilities" {}
+variable "container_name" {}
+variable "network_mode" {}
+variable "container_port" {}

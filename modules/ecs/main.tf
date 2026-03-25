@@ -4,21 +4,21 @@ resource "aws_ecs_cluster" "this" {
 
 resource "aws_ecs_task_definition" "task" {
   family                   = "${var.env}-task"
-  requires_compatibilities = ["FARGATE"]
-  cpu                      = "256"
+  requires_compatibilities = [var.compatibilities]
+  cpu                      = var.cpu
   memory                   = var.memory
 
-  network_mode = "awsvpc"
+  network_mode = var.network_mode
 
   container_definitions = jsonencode([
     {
-      name  = "app"
+      name  = var.container_name
       image = var.image
-      cpu   = 256
+      cpu   = var.cpu
       memory = var.memory
       essential = true
       portMappings = [{
-        containerPort = 80
+        containerPort = var.container_port
       }]
     }
   ])
@@ -38,7 +38,7 @@ resource "aws_ecs_service" "service" {
 
   load_balancer {
     target_group_arn = var.tg_arn
-    container_name   = "app"
-    container_port   = 80
+    container_name   = var.container_name
+    container_port   = var.container_port
   }
 }
